@@ -1,0 +1,140 @@
+% xautthesis.sty - 西安理工大学学士学位论文格式宏包
+\ProvidesPackage{xautthesis}
+\usepackage{fontspec}     % 字体控制
+
+%---------------------------------------------
+% 字体设置
+%---------------------------------------------
+% 设置默认字体(正文)
+\setmainfont{Times New Roman}    % 英文默认字体
+\setCJKmainfont{SimSun}[AutoFakeBold=true]          % 中文默认字体(宋体)
+% 设置正文字体大小(如小四号 12pt)
+\renewcommand\normalsize{
+    \fontsize{12pt}{15pt}\selectfont % 字号12 = 小四号, 行距15
+}
+\normalsize % 应用字体大小
+
+%---------------------------------------------
+% 页面设置
+%---------------------------------------------
+\usepackage[a4paper, top=2.6cm, bottom=3.1cm, left=2.1cm, right=2.1cm,
+    headsep=0.4cm, footskip=1.5cm, bindingoffset=0.5cm]{geometry}
+
+%---------------------------------------------
+% 目录设置
+%---------------------------------------------
+\makeatletter
+% 目录行距设置
+% section
+\patchcmd{\l@section}
+{\hfil}
+{\leaders\hbox to 0.8em{\hss\small.\hss}\hfill}
+{}{}
+% subsection
+\patchcmd{\l@subsection}
+{\hfil}
+{\leaders\hbox to 0.8em{\hss\small.\hss}\hfill}
+{}{}
+% subsubsection
+\patchcmd{\l@subsubsection}
+{\hfil}
+{\leaders\hbox to 0.8em{\hss\small.\hss}\hfill}
+{}{}
+
+% 目录缩进设置
+% \makeatletter
+\renewcommand{\l@section}{\@dottedtocline{1}{1em}{0.1em}}
+\renewcommand{\l@subsection}{\@dottedtocline{2}{1.9em}{0.1em}}
+\renewcommand{\l@subsubsection}{\@dottedtocline{2}{2.8em}{0.1em}}
+\makeatother
+
+%---------------------------------------------
+% 页眉和页码设置
+%---------------------------------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{} % 清除默认设置
+\renewcommand{\headrulewidth}{0.4pt} % 页眉下划线宽度0.4pt
+\fancyhead[CE]{\kaishu\zihao{5}西安理工大学学士学位论文} % 偶数页
+\renewcommand{\sectionmark}[1]{
+    \markboth{第\thesection 章\quad #1}{} % 替换默认\leftmark的编号行为
+}
+\fancyhead[CO]{\kaishu\zihao{5}\leftmark} % 奇数页章节标题
+\fancyfoot[C]{\kaishu\zihao{5}\thepage} % 页脚页码, 5号楷体, 居中
+
+%---------------------------------------------
+% 标题格式
+%---------------------------------------------
+\usepackage{titlesec}
+
+% 1. 一级标题：黑体, 3号, 段前0行, 段后0行, 前后手动空行
+\titleformat{\section}
+{\centering\heiti\fontsize{16pt}{18pt}\selectfont} % 居中, 黑体, 3号
+{第\thesection 章}{1em}{} % 编号格式
+\titlespacing*{\section}{0pt}{0pt}{34pt} % 段前(用\par换行)段后1行小四(小四14pt, 一级文本编号单倍行距7)
+
+% 2. 二级标题：黑体, 4号, 段前0.5行, 段后0行
+\titleformat{\subsection}
+{\heiti\fontsize{14pt}{16pt}\selectfont}
+{\thesubsection}{1em}{}
+\titlespacing*{\subsection}{0pt}{12pt}{5pt}
+
+% 3. 三级标题：黑体, 小4号, 段前0.5行, 段后0行
+\titleformat{\subsubsection}
+{\heiti\fontsize{12pt}{14pt}\selectfont}
+{\thesubsubsection}{1em}{}
+\titlespacing*{\subsubsection}{0pt}{6pt}{0pt}
+
+%---------------------------------------------
+% 引用格式
+%---------------------------------------------
+\let\oldcite\cite
+\renewcommand{\cite}[1]{\textsuperscript{\oldcite{#1}}}
+
+%---------------------------------------------
+% 图表、公式编号格式
+%---------------------------------------------
+\numberwithin{figure}{section}  %关联图号和章节, 每一个section重置一下图号计数器
+\renewcommand {\thefigure} {\arabic{section}-\arabic{figure}}  %修改图号格式,例如 图3-2
+
+\numberwithin{table}{section}
+\renewcommand {\thetable} {\arabic{section}-\arabic{table}}
+
+\numberwithin{equation}{section}
+\renewcommand {\theequation} {\arabic{section}-\arabic{equation}}
+
+% 图表标题：5号楷体
+\DeclareCaptionFormat{fivekai}{\fontsize{10.5pt}{0pt}\selectfont\kaishu#1#2#3}
+% 设置所有图表使用这个格式
+\captionsetup{format=fivekai, labelsep=quad}
+
+% % 设置图表上下垂直空白
+% \setlength{\abovecaptionskip}{0pt}   % 图像/表格 与 标题 之间的垂直间距
+% \setlength{\belowcaptionskip}{0pt}   % 标题 与 正文之间的垂直间距
+% \setlength{\floatsep}{0pt}            % 浮动体之间间距
+% \setlength{\textfloatsep}{0pt}        % 浮动体与正文间距（页顶/页底浮动体）
+% \setlength{\intextsep}{0pt}           % 文本中浮动体上下间距
+
+%---------------------------------------------
+% 段落格式
+%---------------------------------------------
+\setlength{\parindent}{2em}  % 首行缩进
+\setlength{\parskip}{0pt}  % 段前段后0行
+
+%---------------------------------------------
+% 断字控制
+%---------------------------------------------
+\hyphenpenalty=5000
+\tolerance=1000
+
+%---------------------------------------------
+% 参考文献条目间距
+%---------------------------------------------
+\makeatletter
+\let\oldthebibliography\thebibliography
+\renewcommand{\thebibliography}[1]{%
+    \oldthebibliography{#1}%
+    \setlength{\itemsep}{0em}  % 调整条目间距
+    \setlength{\parskip}{0pt}  % 段间距
+}
+\makeatother
