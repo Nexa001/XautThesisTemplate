@@ -21,4 +21,10 @@
 └── main.pdf # 编译后的示例论文
 
 ## 更新历史
-2025.06.02 Version: v0.0.1: Initial version
+2025.06.02 Version: v0.0.1
+更新日志:
+Initial version
+
+2025.06.12 Version: v0.0.2
+更新日志:
+更新了目录相关格式, 添加了三级标题\subsubsection的一段示例
